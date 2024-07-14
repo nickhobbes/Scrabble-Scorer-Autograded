@@ -35,12 +35,30 @@ function oldScrabbleScorer(word) {
 function initialPrompt() {
    console.log("Let's play some scrabble!\n");
 
-   let userWord = input.question("Enter a word to score: ");
-
+   let userWord = '';
+   do {
+      userWord = input.question("Enter a word to score: ").trim();
+   } while (containsNumbersOrSymbols(userWord));
+   
    return userWord;
 };
 
+function containsNumbersOrSymbols(word) {
+   let charCode = null;
+   word = word.toLowerCase();
+
+   for (let i = 0; i < word.length; i++) {
+      charCode = word.charCodeAt(i);
+      if ((charCode < 97 || charCode > 122) && charCode !== 32) {
+         return true;
+      }
+   }
+
+   return false;
+};
+
 let newPointStructure = transform(oldPointStructure);
+newPointStructure[' '] = 0;
 
 let simpleScorer = function(word) {
    return word.length;
@@ -98,9 +116,12 @@ function scorerPrompt() {
    console.log("1 - Vowel Bonus: Vowels are worth 3 points");
    console.log("2 - Scrabble: Uses scrabble point system");
 
-   let selectedScorer = 0;
-   selectedScorer = input.question("Enter 0, 1, or 2: ");
+   let selectedScorer = null;
 
+   do {
+      selectedScorer = input.question("Enter 0, 1, or 2: ");
+   } while (selectedScorer < 0 || selectedScorer > 2);
+   
    return scoringAlgorithms[selectedScorer];
 };
 

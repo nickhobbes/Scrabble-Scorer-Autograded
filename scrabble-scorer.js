@@ -36,9 +36,8 @@ function initialPrompt() {
    console.log("Let's play some scrabble!\n");
 
    let userWord = input.question("Enter a word to score: ");
-   //console.log(oldScrabbleScorer(wordToScore));
-   return userWord;
 
+   return userWord;
 };
 
 let newPointStructure = transform(oldPointStructure);
@@ -63,8 +62,15 @@ let vowelBonusScorer = function(word) {
    return vowelScore;
 };
 
-let scrabbleScorer = function() {
+let scrabbleScorer = function(word) {
+   word = word.toLowerCase();
+   let scrabbleScore = 0;
 
+   for (let i = 0; i < word.length; i++) {
+      scrabbleScore += newPointStructure[word[i]];
+   }
+
+   return scrabbleScore;
 };
 
 const scoringAlgorithms = [
@@ -81,7 +87,7 @@ const scoringAlgorithms = [
    {
       name: "Scrabble",
       description: "The traditional scoring algorithm.",
-      scorerFunction: oldScrabbleScorer
+      scorerFunction: scrabbleScorer
    }
 ];
 
@@ -104,20 +110,20 @@ function transform(pointStructureToTransform) {
    let tempLetter = '';
    for (pointValue in oldPointStructure) {
       for (let i = 0; i < oldPointStructure[pointValue].length; i++) {
-         tempLetter = oldPointStructure[pointValue][i];
-         transformedStructure[tempLetter] = pointValue;
+         tempLetter = oldPointStructure[pointValue][i].toLowerCase();
+         transformedStructure[tempLetter] = Number(pointValue);
       }
    }
 
-   console.log(transformedStructure);
+   return transformedStructure;
 };
 
 function runProgram() {
-   //let wordToScore = initialPrompt(); 
-   //let userSelectedScorer = scorerPrompt();
-   //let score = userSelectedScorer.scorerFunction(wordToScore);
+   let wordToScore = initialPrompt(); 
+   let userSelectedScorer = scorerPrompt();
+   let score = userSelectedScorer.scorerFunction(wordToScore);
 
-   //console.log(`Score for '${wordToScore}': ${score}`);
+   console.log(`Score for '${wordToScore}': ${score}`);
 }
 
 // Don't write any code below this line //

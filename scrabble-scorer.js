@@ -41,7 +41,7 @@ function initialPrompt() {
 
 };
 
-let newPointStructure;
+let newPointStructure = transform(oldPointStructure);
 
 let simpleScorer = function(word) {
    return word.length;
@@ -63,7 +63,9 @@ let vowelBonusScorer = function(word) {
    return vowelScore;
 };
 
-let scrabbleScorer;
+let scrabbleScorer = function() {
+
+};
 
 const scoringAlgorithms = [
    {
@@ -96,14 +98,26 @@ function scorerPrompt() {
    return scoringAlgorithms[selectedScorer];
 };
 
-function transform() {};
+function transform(pointStructureToTransform) {
+   let transformedStructure = {};
+
+   let tempLetter = '';
+   for (pointValue in oldPointStructure) {
+      for (let i = 0; i < oldPointStructure[pointValue].length; i++) {
+         tempLetter = oldPointStructure[pointValue][i];
+         transformedStructure[tempLetter] = pointValue;
+      }
+   }
+
+   console.log(transformedStructure);
+};
 
 function runProgram() {
-   let wordToScore = initialPrompt(); 
-   let userSelectedScorer = scorerPrompt();
-   let score = userSelectedScorer.scorerFunction(wordToScore);
+   //let wordToScore = initialPrompt(); 
+   //let userSelectedScorer = scorerPrompt();
+   //let score = userSelectedScorer.scorerFunction(wordToScore);
 
-   console.log(`Score for '${wordToScore}': ${score}`);
+   //console.log(`Score for '${wordToScore}': ${score}`);
 }
 
 // Don't write any code below this line //

@@ -33,26 +33,77 @@ function oldScrabbleScorer(word) {
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
-   console.log("Let's play some scrabble! Enter a word:");
+   console.log("Let's play some scrabble!\n");
+
+   let userWord = input.question("Enter a word to score: ");
+   //console.log(oldScrabbleScorer(wordToScore));
+   return userWord;
+
 };
 
 let newPointStructure;
 
-let simpleScorer;
+let simpleScorer = function(word) {
+   return word.length;
+};
 
-let vowelBonusScorer;
+let vowelBonusScorer = function(word) {
+   word = word.toUpperCase();
+   let vowelScore = 0;
+   let vowelArr = ['A', 'E', 'I', 'O', 'U'];
+
+   for (let i = 0; i < word.length; i++) {
+      if (vowelArr.includes(word[i])) {
+         vowelScore += 3;
+      } else {
+         vowelScore += 1;
+      }
+   }
+
+   return vowelScore;
+};
 
 let scrabbleScorer;
 
-const scoringAlgorithms = [];
+const scoringAlgorithms = [
+   {
+      name: "Simple Score",
+      description: "Each letter is worth 1 point.",
+      scorerFunction: simpleScorer
+   },
+   {
+      name: "Bonus Vowels",
+      description: "Vowels are 3 pts, consonants are 1 pt.",
+      scorerFunction: vowelBonusScorer
+   },
+   {
+      name: "Scrabble",
+      description: "The traditional scoring algorithm.",
+      scorerFunction: oldScrabbleScorer
+   }
+];
 
-function scorerPrompt() {}
+function scorerPrompt() {
+   console.log("Which scoring algorithm would you like to use?\n")
+
+   console.log("0 - Simple: One point per character");
+   console.log("1 - Vowel Bonus: Vowels are worth 3 points");
+   console.log("2 - Scrabble: Uses scrabble point system");
+
+   let selectedScorer = 0;
+   selectedScorer = input.question("Enter 0, 1, or 2: ");
+
+   return scoringAlgorithms[selectedScorer];
+};
 
 function transform() {};
 
 function runProgram() {
-   initialPrompt();
-   
+   let wordToScore = initialPrompt(); 
+   let userSelectedScorer = scorerPrompt();
+   let score = userSelectedScorer.scorerFunction(wordToScore);
+
+   console.log(`Score for '${wordToScore}': ${score}`);
 }
 
 // Don't write any code below this line //

@@ -34,11 +34,15 @@ function oldScrabbleScorer(word) {
 
 function initialPrompt() {
    console.log("Let's play some scrabble!\n");
-
    let userWord = '';
+
+   //////////
+   // Do while loop validates the user's input
+   // Checks for numbers, symbols and an empty string
+
    do {
       userWord = input.question("Enter a word to score: ").trim();
-   } while (containsNumbersOrSymbols(userWord));
+   } while (containsNumbersOrSymbols(userWord) || !userWord.length);
    
    return userWord;
 };
@@ -47,8 +51,12 @@ function containsNumbersOrSymbols(word) {
    let charCode = null;
    word = word.toLowerCase();
 
+   /////////
+   // For loop converts each character to its ASCII decimal value
+   // Checks to see whether the value is outside the range of a - z or the space character
    for (let i = 0; i < word.length; i++) {
       charCode = word.charCodeAt(i);
+
       if ((charCode < 97 || charCode > 122) && charCode !== 32) {
          return true;
       }
@@ -58,6 +66,10 @@ function containsNumbersOrSymbols(word) {
 };
 
 let newPointStructure = transform(oldPointStructure);
+
+/////////
+// Bonus Part 2
+// addes a space character key/value pair into the newPointStructure
 newPointStructure[' '] = 0;
 
 let simpleScorer = function(word) {
@@ -69,6 +81,8 @@ let vowelBonusScorer = function(word) {
    let vowelScore = 0;
    let vowelArr = ['A', 'E', 'I', 'O', 'U'];
 
+   /////////
+   // Loops through the user's word to see if any of the characters are included in the vowel array
    for (let i = 0; i < word.length; i++) {
       if (vowelArr.includes(word[i])) {
          vowelScore += 3;
@@ -120,7 +134,8 @@ function scorerPrompt() {
 
    do {
       selectedScorer = input.question("Enter 0, 1, or 2: ");
-   } while (selectedScorer < 0 || selectedScorer > 2);
+      //console.log(selectedScorer);
+   } while ((selectedScorer < 0 || selectedScorer > 2) || !selectedScorer.length);
    
    return scoringAlgorithms[selectedScorer];
 };
@@ -129,6 +144,12 @@ function transform(pointStructureToTransform) {
    let transformedStructure = {};
 
    let tempLetter = '';
+
+   /////////
+   // Loops through each key/value pair in the oldPointStructure
+   // Inner loop loops through each letter in the value
+   //    Stores current letter in a temp variable
+   //    Creates new key/value pair in the transformedStructure object
    for (pointValue in oldPointStructure) {
       for (let i = 0; i < oldPointStructure[pointValue].length; i++) {
          tempLetter = oldPointStructure[pointValue][i].toLowerCase();
